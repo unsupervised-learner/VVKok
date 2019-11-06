@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(DT)
 library(dplyr)
+library(ggplot2)
 
 
 interface <- dashboardPage(
@@ -15,8 +16,7 @@ interface <- dashboardPage(
     fluidRow(
       column(width=10),
       column(width=2)
-    ),
-    dataTableOutput('temp_view')
+    )
   )
 )
 
@@ -39,11 +39,12 @@ logic <- function(input, output){
   #filter through crime categories between 2015-2016 , aggregated by province
   filter_categories <- reactive({
     data = load_data() %>% filter(Category==input$crime_category) %>% group_by(Province)
-    data%>%select(X2015.2016)
+    return(data%>%select(X2015.2016))
   })
   
-  output$temp_view <- renderDataTable({
-    filter_categories()
+  #code to render barplot
+  output$bar_plot <- renderPlot({
+    ggplot(data = filter_categories()) + geom_bar(aes(x=Province, y=X2015.2016), stat = 'identity')
   })
   
 }
