@@ -37,7 +37,7 @@ logic <- function(input, output){
   
   #filter through crime categories between 2015-2016 , aggregated by province
   filter_categories <- reactive({
-    load_data() %>% group_by(Province) %>% select(Category)
+    load_data() %>% group_by(Province) %>% select(Category) %>% select(2015-2016)
   })
   
 }
