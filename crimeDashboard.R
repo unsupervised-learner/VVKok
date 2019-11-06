@@ -14,7 +14,10 @@ interface <- dashboardPage(
   ),
   dashboardBody(
     fluidRow(
-      column(width=10),
+      column(width=10,
+             plotOutput('bar_plot')
+             ),
+      
       column(width=2)
     )
   )
