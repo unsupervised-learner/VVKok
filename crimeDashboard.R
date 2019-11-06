@@ -18,7 +18,10 @@ interface <- dashboardPage(
              plotOutput('bar_plot')
              ),
       
-      column(width=2)
+      column(width=2,
+             tags$h4('How the dashboard works'),
+             tags$hr(),
+             tags$p('The user select a crime category and the dashboard displays the counts of selected crime category for each province for the period from 2015 to 2016'))
     )
   )
 )
