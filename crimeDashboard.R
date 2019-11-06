@@ -26,17 +26,20 @@ interface <- dashboardPage(
              tags$p('The user select a crime category and the dashboard displays the counts of selected crime category for each province for the period from 2015 to 2016.'))
       )),
       tabPanel('Download',
-        column(width=10,
-               dataTableOutput('table')
+               uiOutput(
+                 outputId = 'provinces'
                ),
-        column(width=2,
+               dataTableOutput('table'),
+                 tags$h4('Visualize how crime has changed over time'),
+                 tags$p('select time periods to visualize'),
+                 wellPanel(
+                   uiOutput('periods_selector'),
+                   plotOutput('plotviz')
+                 ),
                wellPanel(
                  tags$h3('Options'),
-                 tags$p('Select a province below and click download to download data for selected province'),
+                 tags$p('Select a province and click download to download data for selected province'),
                  tags$hr(),
-                 uiOutput(
-                   outputId = 'provinces',
-                 ),
                  downloadButton(
                    outputId = 'download_button',
                    label = 'Download data'
@@ -46,7 +49,6 @@ interface <- dashboardPage(
       )
     )
   )
-)
 
 logic <- function(input, output){
   
@@ -93,6 +95,27 @@ logic <- function(input, output){
       label = 'Select a province',
       choices = load_data()%>%select(Province)
     )
+  })
+  
+  #
+  output$periods_selector <- renderUI({
+    selectInput(
+      inputId = 'periods_selected',
+      label = '',
+      choices = colnames(load_data()[4:14]),
+      multiple = TRUE
+    )
+  })
+  
+  output$table <- renderDataTable({
+    selected_data = data%>%filter(Province==input$province_selected)
+  })
+  
+  output$plotviz <- renderPlot({
+    period1 = input$periods_selected[1]
+    period2 = input$periods_selected[2]
+    selected_data = data%>%filter(Province==input$province_selected)$period1
+    plot(seq(1:dim(selected_data)[1]), selected_data)
   })
 }
 
