@@ -1,2 +1,2 @@
-docker build -t vernon_kok/crimeDashboard .
-docker run crimeDashboard
+2.1.9) docker build -t vernon_kok/crimeDashboard .
+2.1.10) docker run crimeDashboard
