@@ -1,0 +1,6 @@
+install.packages('shiny')
+install.packages('shinydashboard')
+install.packages('dplyr')
+install.packages('plotly')
+install.packages('ggplot2')
+install.packages('DT')
