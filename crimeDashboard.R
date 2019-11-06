@@ -13,6 +13,8 @@ interface <- dashboardPage(
     uiOutput('select_category')
   ),
   dashboardBody(
+    tabsetPanel(
+      tabPanel('Explore',
     fluidRow(
       column(width=10,
              plotOutput('bar_plot')
@@ -21,7 +23,27 @@ interface <- dashboardPage(
       column(width=2,
              tags$h4('How the dashboard works'),
              tags$hr(),
-             tags$p('The user select a crime category and the dashboard displays the counts of selected crime category for each province for the period from 2015 to 2016'))
+             tags$p('The user select a crime category and the dashboard displays the counts of selected crime category for each province for the period from 2015 to 2016.'))
+      )),
+      tabPanel('Download',
+        column(width=10,
+               dataTableOutput('table')
+               ),
+        column(width=2,
+               wellPanel(
+                 tags$h3('Options'),
+                 tags$p('Select a province below and click download to download data for selected province'),
+                 tags$hr(),
+                 uiOutput(
+                   outputId = 'provinces',
+                 ),
+                 downloadButton(
+                   outputId = 'download_button',
+                   label = 'Download data'
+                 )
+               )
+               )
+      )
     )
   )
 )
@@ -53,6 +75,25 @@ logic <- function(input, output){
     ggplot(data = filter_categories()) + geom_bar(aes(x=Province, y=X2015.2016), stat = 'identity')
   })
   
+  #method to control downloading
+  output$download_button <- downloadHandler(
+    filename = 'downloaded_data.csv',
+    content = function(file_loc){
+      data = load_data()
+      selected_data = data%>%filter(Province==input$province_selected)
+      write.csv(selected_data, file_loc)
+    },
+    contentType = 'text/csv'
+  )
+  
+  #method to display provinces to user
+  output$provinces <- renderUI({
+    selectInput(
+      inputId = 'province_selected',
+      label = 'Select a province',
+      choices = load_data()%>%select(Province)
+    )
+  })
 }
 
 shinyApp(interface, logic)
