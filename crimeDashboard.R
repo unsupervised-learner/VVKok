@@ -9,7 +9,12 @@ interface <- dashboardPage(
   dashboardSidebar(
     uiOutput('select_category')
   ),
-  dashboardBody()
+  dashboardBody(
+    fluidRow(
+      column(width=10),
+      column(width=2)
+    )
+  )
 )
 
 logic <- function(input, output){
