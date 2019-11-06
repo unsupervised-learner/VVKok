@@ -5,7 +5,9 @@ library(dplyr)
 
 
 interface <- dashboardPage(
-  dashboardHeader(),
+  dashboardHeader(
+    title = 'South African Crime Analytics'
+  ),
   dashboardSidebar(
     uiOutput('select_category')
   ),
