@@ -1,1 +1,2 @@
 docker build -t vernon_kok/crimeDashboard .
+docker run crimeDashboard
