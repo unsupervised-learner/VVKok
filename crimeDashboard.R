@@ -8,7 +8,8 @@ interface <- dashboardPage(
   dashboardHeader(),
   dashboardSidebar(
     uiOutput('select_category')
-  )
+  ),
+  dashboardBody()
 )
 
 logic <- function(input, output){
